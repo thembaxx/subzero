@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f7f8f4" />
+    <title>A little pause · Trace</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100dvh;
+        display: grid;
+        place-items: center;
+        background: #f7f8f4;
+        color: #242c25;
+        font-family: Arial, sans-serif;
+        text-align: center;
+        padding: 28px;
+      }
+      main {
+        max-width: 410px;
+      }
+      img {
+        width: 72px;
+        height: 72px;
+        border-radius: 18px;
+        margin-bottom: 28px;
+      }
+      h1 {
+        font-weight: 500;
+        font-size: 36px;
+        letter-spacing: -1.7px;
+        margin: 0 0 20px;
+      }
+      p {
+        font-size: 14px;
+        line-height: 1.9;
+        color: #6c736a;
+      }
+      a {
+        display: inline-block;
+        background: #d3eea1;
+        color: #29381c;
+        padding: 15px 26px;
+        border-radius: 7px;
+        font-size: 13px;
+        margin-top: 18px;
+        text-decoration: none;
+      }
+      small {
+        display: block;
+        font-size: 11px;
+        margin-top: 28px;
+        color: #6c736a;
+      }
+      @media (prefers-color-scheme: dark) {
+        body {
+          background: #171c18;
+          color: #eff2e9;
+        }
+        p,
+        small {
+          color: #aab3a5;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <img src="/icon.svg" alt="Trace fingerprint" />
+      <h1>A little pause.</h1>
+      <p>You’re offline right now. Reconnect to return to your digital footprint.</p>
+      <p>
+        Your personal results aren’t stored in the offline cache. A little extra privacy, by design.
+      </p>
+      <a href="/">Try again</a><small>Trace · Leave less to wonder.</small>
+    </main>
+  </body>
+</html>
