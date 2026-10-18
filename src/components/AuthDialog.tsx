@@ -191,7 +191,11 @@ export function AuthDialog({ onClose }: { onClose: () => void }) {
         <>
           {googleAvailable && (
             <>
-              <button className="button button-outline google-button" onClick={google} disabled={busy}>
+              <button
+                className="button button-outline google-button"
+                onClick={google}
+                disabled={busy}
+              >
                 <GoogleMark />
                 Continue with Google
               </button>
@@ -202,78 +206,78 @@ export function AuthDialog({ onClose }: { onClose: () => void }) {
           )}
           {emailAvailable && phoneAvailable && (
             <div className="auth-tabs" aria-label="Sign-in method">
-            <button
-              className={method === "email" ? "active" : ""}
-              aria-pressed={method === "email"}
-              onClick={() => {
-                setMethod("email");
-                setError("");
-              }}
-            >
-              <Mail size={16} />
-              Email address
-            </button>
-            <button
-              className={method === "phone" ? "active" : ""}
-              aria-pressed={method === "phone"}
-              onClick={() => {
-                setMethod("phone");
-                setError("");
-              }}
-            >
-              <Smartphone size={16} />
-              Phone number
-            </button>
+              <button
+                className={method === "email" ? "active" : ""}
+                aria-pressed={method === "email"}
+                onClick={() => {
+                  setMethod("email");
+                  setError("");
+                }}
+              >
+                <Mail size={16} />
+                Email address
+              </button>
+              <button
+                className={method === "phone" ? "active" : ""}
+                aria-pressed={method === "phone"}
+                onClick={() => {
+                  setMethod("phone");
+                  setError("");
+                }}
+              >
+                <Smartphone size={16} />
+                Phone number
+              </button>
             </div>
           )}
           {emailAvailable || phoneAvailable ? (
             <form onSubmit={send} className="auth-form">
-            {method === "email" ? (
-              <>
-                <label htmlFor="auth-email">Your email address</label>
-                <input
-                  id="auth-email"
-                  autoComplete="email"
-                  type="email"
-                  placeholder="you@yourworld.com"
-                  value={email}
-                  onChange={(event) => setEmail(event.target.value)}
-                  required
-                  maxLength={254}
-                />
-              </>
-            ) : (
-              <>
-                <label htmlFor="auth-phone">Your phone number</label>
-                <div className="phone-field">
-                  <CountrySelect value={country} onChange={setCountry} />
+              {method === "email" ? (
+                <>
+                  <label htmlFor="auth-email">Your email address</label>
                   <input
-                    id="auth-phone"
-                    type="tel"
-                    autoComplete="tel-national"
-                    placeholder="(555) 000-0000"
-                    value={phone}
-                    onChange={(event) => setPhone(event.target.value)}
+                    id="auth-email"
+                    autoComplete="email"
+                    type="email"
+                    placeholder="you@yourworld.com"
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
                     required
-                    maxLength={30}
+                    maxLength={254}
                   />
-                </div>
-                <small>
-                  Phone verification is supported. Discovery currently uses a connected inbox or a
-                  local import.
-                </small>
-              </>
-            )}
-            <button className="button button-primary" type="submit" disabled={busy}>
-              {busy ? (
-                <LoaderCircle className="spin" size={18} />
+                </>
               ) : (
                 <>
-                  {method === "email" ? "Send me a magic link" : "Send verification code"}
-                  <ArrowRight size={18} />
+                  <label htmlFor="auth-phone">Your phone number</label>
+                  <div className="phone-field">
+                    <CountrySelect value={country} onChange={setCountry} />
+                    <input
+                      id="auth-phone"
+                      type="tel"
+                      autoComplete="tel-national"
+                      placeholder="(555) 000-0000"
+                      value={phone}
+                      onChange={(event) => setPhone(event.target.value)}
+                      required
+                      maxLength={30}
+                    />
+                  </div>
+                  <small>
+                    Phone verification is supported. Discovery currently uses a connected inbox or a
+                    local import.
+                  </small>
                 </>
               )}
-            </button>
+              <button className="button button-primary" type="submit" disabled={busy}>
+                {busy ? (
+                  <LoaderCircle className="spin" size={18} />
+                ) : (
+                  <>
+                    {method === "email" ? "Send me a magic link" : "Send verification code"}
+                    <ArrowRight size={18} />
+                  </>
+                )}
+              </button>
             </form>
           ) : (
             <p className="form-error" role="alert">
