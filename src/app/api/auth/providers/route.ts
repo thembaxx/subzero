@@ -33,7 +33,10 @@ export async function GET() {
       ...providers,
       google: providers.google && process.env.GOOGLE_OAUTH_READY !== "false",
     };
-    return NextResponse.json({ providers: available }, { headers: { "Cache-Control": "no-store" } });
+    return NextResponse.json(
+      { providers: available },
+      { headers: { "Cache-Control": "no-store" } },
+    );
   } catch {
     return unavailable();
   }
