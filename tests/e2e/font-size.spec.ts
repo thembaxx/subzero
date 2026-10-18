@@ -28,7 +28,9 @@ test("form controls keep a 16px font size at mobile and desktop widths", async (
 
     await dialog.getByRole("button", { name: "Phone number", exact: true }).click();
     await dialog.getByRole("button", { name: "Choose country calling code" }).click();
-    await expect(dialog.getByRole("combobox", { name: "Search country or calling code" })).toBeVisible();
+    await expect(
+      dialog.getByRole("combobox", { name: "Search country or calling code" }),
+    ).toBeVisible();
     await expectSixteenPixelFields();
 
     await page.goto("/dashboard?demo=1");
