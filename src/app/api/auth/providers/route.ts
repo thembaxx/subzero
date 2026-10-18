@@ -8,7 +8,10 @@ export async function GET() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
   const unavailable = () =>
-    NextResponse.json({ providers: null }, { status: 503, headers: { "Cache-Control": "no-store" } });
+    NextResponse.json(
+      { providers: null },
+      { status: 503, headers: { "Cache-Control": "no-store" } },
+    );
   if (!url || !key) return unavailable();
 
   try {
