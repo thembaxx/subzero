@@ -35,6 +35,18 @@ Configure the Supabase project:
 
 Restart the dev server after changing public variables. Public Supabase configuration is embedded at build time, so rebuild production after changes. Never commit credentials.
 
+### Google OAuth readiness
+
+The public `/api/auth/providers` endpoint reads enabled sign-in methods from Supabase.
+It shows Google and phone options only when their providers report enabled.
+`GOOGLE_OAUTH_READY=false` is an optional, server-only deployment variable
+that hides Google even if Supabase marks it enabled; use this when Google's
+OAuth page returns `401 invalid_client` because the registered client is missing.
+After configuring a valid **Web application** OAuth client in Google Cloud
+and updating Supabase Authentication → Providers → Google, change the
+variable to `true` (or remove it), redeploy, and verify the full sign-in flow.
+Do not add OAuth client secrets to source control or browser environment variables.
+
 ## What discovery can establish
 
 - **Connected Gmail:** the provider token’s inbox must match the server-verified email. The app reads sender metadata from up to 24 matching welcome/verification emails in batches of four. Results are **possible** accounts; they do not confirm an account remains active. Message bodies are not fetched. Google grants broader read-only mailbox permission, as disclosed before consent. Expired provider tokens require reconnecting.
