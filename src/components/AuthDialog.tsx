@@ -17,6 +17,7 @@ import { Dialog } from "./Dialog";
 import { CountrySelect } from "./CountrySelect";
 import { TraceMark } from "./Logo";
 import { getBrowserClient } from "@/lib/supabase/client";
+import { authErrorMessage } from "@/lib/auth-errors";
 
 export function GoogleMark() {
   return (
@@ -91,10 +92,8 @@ export function AuthDialog({ onClose }: { onClose: () => void }) {
       setDestination(method === "email" ? email.trim() : parsed!.number);
       setStage(method === "email" ? "email-sent" : "otp");
       setCooldown(45);
-    } catch {
-      setError(
-        "We couldn’t send that sign-in request. Check your details and try again in a moment.",
-      );
+    } catch (error) {
+      setError(authErrorMessage(error, method));
     } finally {
       setBusy(false);
     }
@@ -116,8 +115,8 @@ export function AuthDialog({ onClose }: { onClose: () => void }) {
       router.push("/dashboard");
       router.refresh();
       onClose();
-    } catch {
-      setError("That code is invalid or has expired. Try again or request a new one.");
+    } catch (error) {
+      setError(authErrorMessage(error, "verify"));
     } finally {
       setBusy(false);
     }
@@ -134,8 +133,9 @@ export function AuthDialog({ onClose }: { onClose: () => void }) {
         options: { redirectTo: `${window.location.origin}/auth/callback` },
       });
       if (oauthError) throw oauthError;
-    } catch {
-      setError("Google sign-in is unavailable. Please try email or phone.");
+    } catch (error) {
+      setError(authErrorMessage(error, "google"));
+    } finally {
       setBusy(false);
     }
   }
