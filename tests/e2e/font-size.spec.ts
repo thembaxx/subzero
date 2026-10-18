@@ -18,6 +18,14 @@ test("form controls keep a 16px font size at mobile and desktop widths", async (
     }
   }
 
+  await page.route("**/api/auth/providers", (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ providers: { email: true, phone: true, google: false } }),
+    }),
+  );
+
   for (const width of [320, 390, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/");
