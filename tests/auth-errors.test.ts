@@ -46,7 +46,10 @@ test("explains expired OTP and OAuth state errors", () => {
 });
 
 test("handles network and server failures", () => {
-  assert.match(authErrorMessage(new TypeError("Failed to fetch"), "email"), /Check your connection/);
+  assert.match(
+    authErrorMessage(new TypeError("Failed to fetch"), "email"),
+    /Check your connection/,
+  );
   assert.match(authErrorMessage({ status: 503 }, "google"), /service is currently unavailable/);
   assert.match(authErrorMessage({ code: "request_timeout" }, "phone"), /temporarily unavailable/);
 });
