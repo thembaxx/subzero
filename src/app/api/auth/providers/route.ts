@@ -27,7 +27,13 @@ export async function GET() {
     if (!result.ok) return unavailable();
     const providers = parseAuthProviders(await result.json());
     if (!providers) return unavailable();
-    return NextResponse.json({ providers }, { headers: { "Cache-Control": "no-store" } });
+    // A provider can be enabled in Supabase while its Google OAuth client is invalid.
+    // Keep it hidden when production explicitly marks OAuth setup as not ready.
+    const available = {
+      ...providers,
+      google: providers.google && process.env.GOOGLE_OAUTH_READY !== "false",
+    };
+    return NextResponse.json({ providers: available }, { headers: { "Cache-Control": "no-store" } });
   } catch {
     return unavailable();
   }
