@@ -4,6 +4,13 @@ import AxeBuilder from "@axe-core/playwright";
 test("landing, themes, verification entry, and country search work", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
+  await page.route("**/api/auth/providers", (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ providers: { email: true, phone: true, google: false } }),
+    }),
+  );
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("You’re online.Know where.");
   await page.getByRole("button", { name: "Toggle color theme" }).first().click();
@@ -141,4 +148,20 @@ test("production PWA provides a public offline fallback without caching results"
   await expect(
     page.getByText("Your personal results aren’t stored in the offline cache.", { exact: false }),
   ).toBeVisible();
+});
+
+test("unavailable Google and SMS sign-in are hidden, leaving email", async ({ page }) => {
+  await page.route("**/api/auth/providers", (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ providers: { email: true, phone: false, google: false } }),
+    }),
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Find my footprint" }).first().click();
+  const dialog = page.getByRole("dialog", { name: "Sign in to Trace" });
+  await expect(dialog.getByRole("button", { name: "Continue with Google" })).toHaveCount(0);
+  await expect(dialog.getByRole("button", { name: "Phone number" })).toHaveCount(0);
+  await expect(dialog.getByLabel("Your email address")).toBeVisible();
 });
