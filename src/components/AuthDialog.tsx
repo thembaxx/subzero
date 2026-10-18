@@ -18,6 +18,7 @@ import { CountrySelect } from "./CountrySelect";
 import { TraceMark } from "./Logo";
 import { getBrowserClient } from "@/lib/supabase/client";
 import { authErrorMessage } from "@/lib/auth-errors";
+import type { AuthProviders } from "@/lib/auth-providers";
 
 export function GoogleMark() {
   return (
@@ -54,6 +55,32 @@ export function AuthDialog({ onClose }: { onClose: () => void }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [cooldown, setCooldown] = useState(0);
+  const [providers, setProviders] = useState<AuthProviders | null>(null);
+  const emailAvailable = providers?.email !== false;
+  const phoneAvailable = providers?.phone === true;
+  const googleAvailable = providers?.google === true;
+
+  useEffect(() => {
+    const controller = new AbortController();
+    void fetch("/api/auth/providers", { cache: "no-store", signal: controller.signal })
+      .then(async (response) => {
+        if (!response.ok) return;
+        const payload = (await response.json()) as { providers?: AuthProviders | null };
+        if (!controller.signal.aborted && payload.providers) {
+          setProviders(payload.providers);
+        }
+      })
+      .catch(() => {
+        // Keep email available if the optional capability check is unavailable.
+      });
+    return () => controller.abort();
+  }, []);
+
+  useEffect(() => {
+    if (!providers) return;
+    if (!providers.email && providers.phone) setMethod("phone");
+    else if (providers.email && !providers.phone) setMethod("email");
+  }, [providers]);
   useEffect(() => {
     if (cooldown < 1) return;
     const timer = setTimeout(() => setCooldown(cooldown - 1), 1000);
@@ -162,14 +189,19 @@ export function AuthDialog({ onClose }: { onClose: () => void }) {
       </p>
       {stage === "entry" ? (
         <>
-          <button className="button button-outline google-button" onClick={google} disabled={busy}>
-            <GoogleMark />
-            Continue with Google
-          </button>
-          <div className="or-divider">
-            <span>or keep it simple</span>
-          </div>
-          <div className="auth-tabs" aria-label="Sign-in method">
+          {googleAvailable && (
+            <>
+              <button className="button button-outline google-button" onClick={google} disabled={busy}>
+                <GoogleMark />
+                Continue with Google
+              </button>
+              <div className="or-divider">
+                <span>or keep it simple</span>
+              </div>
+            </>
+          )}
+          {emailAvailable && phoneAvailable && (
+            <div className="auth-tabs" aria-label="Sign-in method">
             <button
               className={method === "email" ? "active" : ""}
               aria-pressed={method === "email"}
@@ -192,8 +224,10 @@ export function AuthDialog({ onClose }: { onClose: () => void }) {
               <Smartphone size={16} />
               Phone number
             </button>
-          </div>
-          <form onSubmit={send} className="auth-form">
+            </div>
+          )}
+          {emailAvailable || phoneAvailable ? (
+            <form onSubmit={send} className="auth-form">
             {method === "email" ? (
               <>
                 <label htmlFor="auth-email">Your email address</label>
@@ -240,7 +274,12 @@ export function AuthDialog({ onClose }: { onClose: () => void }) {
                 </>
               )}
             </button>
-          </form>
+            </form>
+          ) : (
+            <p className="form-error" role="alert">
+              Sign-in is not enabled yet. Please contact the site owner.
+            </p>
+          )}
         </>
       ) : (
         <div className="auth-sent">
