@@ -86,7 +86,8 @@ body {
 }
 button,
 input,
-select {
+select,
+textarea {
   font: inherit;
 }
 button,
@@ -112,8 +113,10 @@ button {
   border: 0;
 }
 input,
-select {
+select,
+textarea {
   color: var(--text);
+  font-size: 16px;
 }
 input {
   min-width: 0;
@@ -1437,7 +1440,7 @@ select:focus-visible {
   border-radius: 7px;
   min-height: 46px;
   padding: 12px 14px;
-  font-size: 12px;
+  font-size: 16px;
 }
 .auth-form > .button {
   margin-top: 9px;
@@ -1456,7 +1459,7 @@ select:focus-visible {
   flex: 1;
   min-width: 0;
   outline-offset: -2px;
-  font-size: 12px;
+  font-size: 16px;
 }
 .auth-form > small {
   font-size: 9px;
@@ -1506,7 +1509,7 @@ select:focus-visible {
   color: var(--muted);
 }
 .country-search input {
-  font-size: 11px;
+  font-size: 16px;
   width: 100%;
   min-width: 0;
   padding: 6px 0;
@@ -1624,7 +1627,7 @@ select:focus-visible {
 .auth-form .otp-input {
   text-align: center;
   letter-spacing: 0.5em;
-  font-size: 24px;
+  font-size: 16px;
   padding-left: 24px;
 }
 .auth-callback-notice {
@@ -2115,7 +2118,7 @@ button.stat-card:hover {
   background: transparent;
   min-width: 0;
   width: 100%;
-  font-size: 11px;
+  font-size: 16px;
   outline-offset: 4px;
 }
 .category-filter {
@@ -2128,7 +2131,7 @@ button.stat-card:hover {
   color: var(--muted);
 }
 .category-filter select {
-  font-size: 10px;
+  font-size: 16px;
   border: 0;
   background: transparent;
   max-width: 100px;
@@ -3948,14 +3951,14 @@ button.stat-card:hover {
     font-size: 10px;
   }
   .account-search input {
-    font-size: 10px;
+    font-size: 16px;
   }
   .category-filter {
     padding: 9px 7px;
     gap: 5px;
   }
   .category-filter select {
-    font-size: 8px;
+    font-size: 16px;
     max-width: 94px;
   }
   .category-filter > svg {
@@ -4379,11 +4382,11 @@ button.stat-card:hover {
     gap: 6px;
   }
   .account-search input {
-    font-size: 9px;
+    font-size: 16px;
   }
   .category-filter select {
     max-width: 81px;
-    font-size: 7px;
+    font-size: 16px;
   }
   .category-filter {
     padding-inline: 5px;
