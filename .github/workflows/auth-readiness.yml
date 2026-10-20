@@ -1,0 +1,33 @@
+name: Auth readiness
+on:
+  schedule:
+    - cron: "21 5,17 * * *"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: trace-auth-readiness
+  cancel-in-progress: false
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Check public auth-provider configuration
+        env:
+          PRODUCTION_URL: https://subzero-five.vercel.app/
+        run: node scripts/check-auth-readiness.mjs
+      - name: Attach readiness report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: auth-readiness
+          path: reports/auth-readiness.json
+          retention-days: 14
+          if-no-files-found: warn
