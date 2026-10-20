@@ -1,0 +1,30 @@
+name: Format Trace automation configuration
+on:
+  push:
+    branches: [themes]
+    paths:
+      - .github/workflows/format-automation-once.yml
+permissions:
+  contents: read
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec oxfmt --write .github/dependabot.yml scripts/check-auth-readiness.mjs
+      - name: Display formatter output for review
+        run: |
+          for file in .github/dependabot.yml scripts/check-auth-readiness.mjs; do
+            printf '\nAUTOMATION_FORMAT_BEGIN:%s\n' "$file"
+            cat "$file"
+            printf '\nAUTOMATION_FORMAT_END:%s\n' "$file"
+          done
