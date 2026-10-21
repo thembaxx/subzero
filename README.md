@@ -1,5 +1,17 @@
 # Trace
 
+**Trace** is a privacy-aware digital-footprint explorer for reviewing possible online accounts and exposure signals, with an interactive demonstration when providers are not configured.
+
+**Implementation highlights:** an openly labelled sample-data dashboard, search and exposure filters, browser-local CSV import, JSON report export, responsive visual identity and an optional Supabase authentication path. Gmail discovery uses opt-in metadata access and Have I Been Pwned requires an independently configured subscription key.
+
+**Built with:** Next.js 16, React 19, TypeScript, Tailwind CSS, Supabase client libraries, GSAP and Three.js. Provider setup requirements and permission boundaries are documented below.
+
+**Project status:** the demo works without credentials; **real account verification, mailbox discovery and breach lookups depend on external services and permissions**. Sample exposure results are not evidence about a real person. See [what discovery can establish](#what-discovery-can-establish).
+
+[View source](https://github.com/thembaxx/subzero) · [Run locally](#run)
+
+---
+
 A personal digital-footprint app built in the empty `thembaxx/subzero` repository on the `themes` branch. The Trace brand includes an original fingerprint mark, Satoshi typography, warm neutral and lime colors, light/dark themes, a Three.js identity sculpture, and GSAP scroll animation.
 
 ## Run
