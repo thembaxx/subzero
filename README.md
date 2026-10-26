@@ -2,7 +2,7 @@
 
 **Trace** is a privacy-aware digital-footprint explorer for reviewing possible online accounts and exposure signals, with an interactive demonstration when providers are not configured.
 
-**Implementation highlights:** an openly labelled sample-data dashboard, search and exposure filters, browser-local CSV import, JSON report export, responsive visual identity and an optional Supabase authentication path. Gmail discovery uses opt-in metadata access and Have I Been Pwned requires an independently configured subscription key.
+**Implementation highlights:** an openly labelled sample-data dashboard, search and exposure filters, browser-local CSV import, JSON report export, responsive visual identity and an optional Supabase authentication path. Gmail discovery uses opt-in Gmail read-only access, but Trace reads sender metadata only and Have I Been Pwned requires an independently configured subscription key.
 
 **Built with:** Next.js 16, React 19, TypeScript, Tailwind CSS, Supabase client libraries, GSAP and Three.js. Provider setup requirements and permission boundaries are documented below.
 
