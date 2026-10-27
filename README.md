@@ -98,3 +98,7 @@ For an existing system Chromium, set `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/b
 Deploy as a standard Next.js app using `pnpm build` and `pnpm start`, with Node.js 24.5+, HTTPS, and the environment variables above. Configure Supabase/Google redirects for the final domain. There is no static export because identity verification and discovery run on the server.
 
 The app does not enumerate third-party login forms, close accounts, send deletion requests, or claim to find every account. Users manage accounts directly with each service.
+
+## Account review history
+
+Possible accounts can be reviewed as confirmed, not yours, or uncertain, with a next step and a bounded note. Explicit Save stores the decision only in this browser, scoped separately to each signed-in identity and the demo. The footprint export includes review decisions; Clear device reviews removes only the current identity’s history. Malformed records block overwrites and remain available in the export. Reviews record your assessment, not a provider-verified account or a completed deletion. Live discovery still requires configured, verified providers; local checks do not establish live Gmail/HIBP readiness.

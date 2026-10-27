@@ -60,15 +60,19 @@ export default function Privacy() {
         <h2>Your CSV stays close.</h2>
         <p>
           CSV imports are processed in this browser. Trace extracts website domains and discards
-          password, username, and note fields. The file is never uploaded. Imported results and
-          review marks remain in the current page session and disappear when the page is reloaded.
+          password, username, and note fields. The file is never uploaded. Imported account results
+          remain in the current page session and disappear when the page is reloaded. Explicitly
+          saved reviews retain the account domain, your decision, next step, note and date in
+          browser storage, separately for each identity and the demo. Export the report to keep a
+          copy; use Clear device reviews to remove that identity’s saved reviews.
         </p>
         <h2>A little less to keep.</h2>
         <p>
           This app does not write scan results to an application database. Results remain in memory
           for the current visit. Signing in uses Supabase session cookies; your theme preference is
-          stored locally. The service worker caches only the public offline page and icons, never
-          dashboard, authentication, or API responses.
+          stored locally. Saved review notes are not encrypted; avoid passwords or sensitive details
+          and clear them when using a shared browser. The service worker caches only the public
+          offline page and icons, never dashboard, authentication, or API responses.
         </p>
         <p>
           External data providers and the hosting service process requests under their own privacy
