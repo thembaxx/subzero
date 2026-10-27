@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -27,6 +27,14 @@ import { Logo, TraceMark } from "./Logo";
 import { ThemeToggle } from "./ThemeToggle";
 import { AccountTable } from "./AccountTable";
 import { AccountDetail } from "./AccountDetail";
+import {
+  createReviewRecord,
+  readReviewHistory,
+  reviewStorageKey,
+  serializeReviewHistory,
+  upsertReview,
+  type ReviewRecord,
+} from "@/lib/review-history";
 import { DashboardSources } from "./DashboardSources";
 import { Dialog } from "./Dialog";
 import { AuthDialog } from "./AuthDialog";
@@ -93,7 +101,48 @@ export function Dashboard({
         ]
       : [],
   );
-  const [reviewed, setReviewed] = useState<Set<string>>(new Set());
+  const [reviews, setReviews] = useState<ReviewRecord[]>([]);
+  const [historyKey, setHistoryKey] = useState("");
+  const [historyError, setHistoryError] = useState("");
+  const [historyRaw, setHistoryRaw] = useState<string | null>(null);
+  const reviewed = new Set(
+    accounts
+      .filter((account) => reviews.some((review) => review.domain === account.domain.toLowerCase()))
+      .map((account) => account.id),
+  );
+  useEffect(() => {
+    let active = true;
+    setHistoryKey("");
+    setReviews([]);
+    setHistoryError("");
+    setHistoryRaw(null);
+    void reviewStorageKey(identity, demo)
+      .then((key) => {
+        if (!active) return;
+        let raw: string | null = null;
+        try {
+          raw = localStorage.getItem(key);
+          const records = readReviewHistory(raw);
+          setReviews(records);
+          setHistoryKey(key);
+        } catch {
+          setHistoryRaw(raw);
+          setHistoryError(
+            "Saved reviews could not be loaded. The original is preserved. Export it before clearing this device’s history.",
+          );
+          setHistoryKey(key);
+        }
+      })
+      .catch(() => {
+        if (active)
+          setHistoryError(
+            "Review storage is unavailable. Export your report to retain your records.",
+          );
+      });
+    return () => {
+      active = false;
+    };
+  }, [identity, demo]);
   const [selected, setSelected] = useState<Account | null>(null);
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState("");
@@ -209,6 +258,8 @@ export function Dashboard({
       exportedAt: new Date().toISOString(),
       accounts: accounts.map((account) => ({ ...account, reviewed: reviewed.has(account.id) })),
       sources,
+      reviews,
+      unreadableReviewHistory: historyRaw,
     };
     const url = URL.createObjectURL(
       new Blob([JSON.stringify(report, null, 2)], { type: "application/json" }),
@@ -230,7 +281,7 @@ export function Dashboard({
       }
     }
     setAccounts([]);
-    setReviewed(new Set());
+    setReviews([]);
     router.push("/");
     router.refresh();
   }
@@ -365,6 +416,41 @@ export function Dashboard({
               </button>
             </div>
           </div>
+          {historyError && (
+            <p role="alert" className="app-notice notice-error">
+              {historyError}
+            </p>
+          )}
+          {historyKey && (
+            <p className="app-notice">
+              Reviews are saved only on this browser for this {demo ? "demo" : "account"}. Export
+              the footprint report to keep a copy.{" "}
+              <button
+                className="button button-outline"
+                onClick={() => {
+                  if (
+                    !confirm(
+                      "Clear review history for this account on this browser? Export your report first to keep a copy.",
+                    )
+                  )
+                    return;
+                  try {
+                    localStorage.removeItem(historyKey);
+                    setReviews([]);
+                    setHistoryRaw(null);
+                    setHistoryError("");
+                    setNotice("This account’s review history was cleared from this browser.");
+                  } catch {
+                    setHistoryError(
+                      "Review history could not be cleared. Try your browser’s site-data settings.",
+                    );
+                  }
+                }}
+              >
+                Clear device reviews
+              </button>
+            </p>
+          )}
           {(notice || error) && (
             <div
               className={`app-notice ${error ? "notice-error" : ""}`}
@@ -523,7 +609,8 @@ export function Dashboard({
             <div className="dashboard-bottom-note">
               <span>
                 <ShieldCheck size={15} />
-                Your results stay in this visit. Nothing is cached for offline access.
+                Scan results stay in this visit. Saved reviews remain on this browser until you
+                clear them.
               </span>
               <button className="text-button" onClick={() => fileInput.current?.click()}>
                 <Plus size={14} />
@@ -551,11 +638,29 @@ export function Dashboard({
       {selected && (
         <AccountDetail
           account={selected}
-          reviewed={reviewed.has(selected.id)}
-          onReview={() => {
-            setReviewed((previous) => new Set(previous).add(selected.id));
-            setNotice(`${selected.name} marked as reviewed for this visit.`);
-            setSelected(null);
+          key={selected.domain}
+          review={reviews.find((review) => review.domain === selected.domain.toLowerCase())}
+          onSaveReview={(input) => {
+            if (!historyKey || historyError)
+              throw new Error(
+                "Review storage is unavailable. Export the report and resolve the storage warning before saving.",
+              );
+            try {
+              const next = upsertReview(
+                readReviewHistory(localStorage.getItem(historyKey)),
+                createReviewRecord(input),
+              );
+              localStorage.setItem(historyKey, serializeReviewHistory(next));
+              setReviews(next);
+              setNotice(`${selected.name} review and next step saved on this browser.`);
+              setSelected(null);
+            } catch (cause) {
+              throw new Error(
+                cause instanceof Error
+                  ? cause.message
+                  : "Review could not be saved. Try exporting your report.",
+              );
+            }
           }}
           onClose={() => setSelected(null)}
         />

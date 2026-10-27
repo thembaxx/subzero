@@ -15,7 +15,10 @@ export default async function DashboardPage({
   searchParams: Promise<{ demo?: string }>;
 }) {
   const demo = (await searchParams).demo === "1";
-  if (demo) return <Dashboard demo identity="alex@yourworld.com · sample" breachEnabled={false} />;
+  if (demo)
+    return (
+      <Dashboard key="demo" demo identity="alex@yourworld.com · sample" breachEnabled={false} />
+    );
   const client = await getServerClient();
   if (!client) redirect("/?auth=required");
   const {
@@ -26,6 +29,7 @@ export default async function DashboardPage({
     redirect("/?auth=required");
   return (
     <Dashboard
+      key={user.id}
       demo={false}
       identity={user.email || user.phone || "Your verified identity"}
       breachEnabled={Boolean(process.env.HIBP_API_KEY)}
