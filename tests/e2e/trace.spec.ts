@@ -123,13 +123,14 @@ test("pages fit mobile, tablet, and desktop widths", async ({ page }) => {
 });
 
 test("both themes keep the landing and dashboard accessible", async ({ page }) => {
-  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.emulateMedia({ reducedMotion: "reduce", colorScheme: "light" });
   for (const path of ["/", "/dashboard?demo=1"]) {
     await page.goto(path);
     for (const theme of ["light", "dark"]) {
-      await page.evaluate((value) => {
-        document.documentElement.setAttribute("data-theme", value);
-      }, theme);
+      if ((await page.locator("html").getAttribute("data-theme")) !== theme) {
+        await page.getByRole("button", { name: "Toggle color theme" }).first().click();
+      }
+      await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
       const result = await new AxeBuilder({ page })
         .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
         .analyze();
