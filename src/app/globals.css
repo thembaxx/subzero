@@ -192,39 +192,49 @@ select:focus-visible {
     transform 0.2s,
     box-shadow 0.2s;
 }
-.button:hover {
-  transform: translateY(-2px);
+@media (hover: hover) and (pointer: fine) {
+  .button:hover {
+    transform: translateY(-2px);
+  }
 }
 .button-primary {
   background: var(--accent);
   color: var(--accent-text);
 }
-.button-primary:hover {
-  background: var(--accent-hover);
-  box-shadow: 0 5px 20px #8bad4620;
+@media (hover: hover) and (pointer: fine) {
+  .button-primary:hover {
+    background: var(--accent-hover);
+    box-shadow: 0 5px 20px #8bad4620;
+  }
 }
 .button-dark {
   background: var(--text);
   color: var(--bg);
 }
-.button-dark:hover {
-  opacity: 0.9;
+@media (hover: hover) and (pointer: fine) {
+  .button-dark:hover {
+    opacity: 0.9;
+  }
 }
 .button-outline {
   border-color: var(--line);
   background: var(--card);
   color: var(--text);
 }
-.button-outline:hover {
-  border-color: var(--muted);
+@media (hover: hover) and (pointer: fine) {
+  .button-outline:hover {
+    border-color: var(--muted);
+  }
 }
 .button-link {
   padding-left: 8px;
   padding-right: 8px;
   font-weight: 500;
 }
-.button-link:hover {
-  background: var(--surface);
+@media (hover: hover) and (pointer: fine) {
+  .button-link:hover {
+    background: var(--surface);
+  }
 }
 .icon-button {
   display: inline-flex;
@@ -237,9 +247,11 @@ select:focus-visible {
     background 0.2s,
     transform 0.2s;
 }
-.icon-button:hover {
-  background: var(--sage);
-  transform: rotate(-4deg);
+@media (hover: hover) and (pointer: fine) {
+  .icon-button:hover {
+    background: var(--sage);
+    transform: rotate(-4deg);
+  }
 }
 .text-button {
   display: inline-flex;
@@ -250,8 +262,10 @@ select:focus-visible {
   padding: 0;
   transition: gap 0.2s;
 }
-.text-button:hover {
-  gap: 15px;
+@media (hover: hover) and (pointer: fine) {
+  .text-button:hover {
+    gap: 15px;
+  }
 }
 .sr-only {
   position: absolute;
@@ -338,8 +352,10 @@ select:focus-visible {
   color: var(--muted);
   transition: color 0.2s;
 }
-.header-nav a:hover {
-  color: var(--text);
+@media (hover: hover) and (pointer: fine) {
+  .header-nav a:hover {
+    color: var(--text);
+  }
 }
 .header-actions {
   display: flex;
@@ -590,8 +606,10 @@ select:focus-visible {
   padding: 7px;
   transition: transform 0.2s;
 }
-.hero-scroll:hover > svg {
-  transform: translateY(3px);
+@media (hover: hover) and (pointer: fine) {
+  .hero-scroll:hover > svg {
+    transform: translateY(3px);
+  }
 }
 .digital-world {
   padding-block: 32px 40px;
@@ -712,9 +730,13 @@ select:focus-visible {
   transition: border-color 0.3s;
   min-height: 417px;
 }
-.feature-card:hover,
 .feature-active {
   border-color: #a8ba94;
+}
+@media (hover: hover) and (pointer: fine) {
+  .feature-card:hover {
+    border-color: #a8ba94;
+  }
 }
 .feature-visual {
   height: 205px;
@@ -722,8 +744,10 @@ select:focus-visible {
   overflow: hidden;
   background: var(--bg);
 }
-.feature-card:hover .feature-visual > div {
-  transform: scale(1.04);
+@media (hover: hover) and (pointer: fine) {
+  .feature-card:hover .feature-visual > div {
+    transform: scale(1.04);
+  }
 }
 .feature-visual > div {
   transition: transform 0.7s ease;
@@ -882,8 +906,10 @@ select:focus-visible {
   box-shadow: var(--shadow);
   transform: rotate(-4deg) !important;
 }
-.feature-card:hover .exposure-preview {
-  transform: rotate(-2deg) scale(1.03) !important;
+@media (hover: hover) and (pointer: fine) {
+  .feature-card:hover .exposure-preview {
+    transform: rotate(-2deg) scale(1.03) !important;
+  }
 }
 .exposure-preview-head {
   display: flex;
@@ -1534,10 +1560,15 @@ select:focus-visible {
   font-size: 11px;
   text-align: left;
 }
-.country-active,
-.country-popover li:hover {
+.country-active {
   background: var(--surface);
   border-radius: 4px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .country-popover li:hover {
+    background: var(--surface);
+    border-radius: 4px;
+  }
 }
 .country-calling {
   margin-left: auto;
@@ -1694,9 +1725,11 @@ select:focus-visible {
     background 0.2s,
     color 0.2s;
 }
-.app-nav-item:hover {
-  background: var(--surface);
-  color: var(--text);
+@media (hover: hover) and (pointer: fine) {
+  .app-nav-item:hover {
+    background: var(--surface);
+    color: var(--text);
+  }
 }
 .app-nav-item.active {
   background: var(--sage);
@@ -1757,8 +1790,10 @@ select:focus-visible {
   color: var(--muted);
   text-align: left;
 }
-.sidebar-exit:hover {
-  color: var(--text);
+@media (hover: hover) and (pointer: fine) {
+  .sidebar-exit:hover {
+    color: var(--text);
+  }
 }
 .sidebar-bottom {
   display: flex;
@@ -1971,9 +2006,11 @@ button.stat-card {
     transform 0.2s,
     border-color 0.2s;
 }
-button.stat-card:hover {
-  transform: translateY(-3px);
-  border-color: var(--muted);
+@media (hover: hover) and (pointer: fine) {
+  button.stat-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--muted);
+  }
 }
 .stat-top {
   display: flex;
@@ -2206,8 +2243,10 @@ button.stat-card:hover {
 .account-table tbody tr {
   transition: background 0.2s;
 }
-.account-table tbody tr:hover {
-  background: var(--bg);
+@media (hover: hover) and (pointer: fine) {
+  .account-table tbody tr:hover {
+    background: var(--bg);
+  }
 }
 .account-avatar {
   width: 34px;
@@ -2297,9 +2336,11 @@ button.stat-card:hover {
   color: var(--muted);
   border-radius: 5px;
 }
-.account-open:hover {
-  background: var(--sage);
-  color: var(--text);
+@media (hover: hover) and (pointer: fine) {
+  .account-open:hover {
+    background: var(--sage);
+    color: var(--text);
+  }
 }
 .table-footnote {
   display: flex;
@@ -2375,8 +2416,10 @@ button.stat-card:hover {
   margin-left: auto;
   color: var(--muted);
 }
-.housekeeping-step:hover > svg {
-  transform: translateX(3px);
+@media (hover: hover) and (pointer: fine) {
+  .housekeeping-step:hover > svg {
+    transform: translateX(3px);
+  }
 }
 .connection-card {
   position: relative;
@@ -3623,8 +3666,10 @@ button.stat-card:hover {
     transform: rotate(-6deg) scale(0.86) !important;
     flex-shrink: 0;
   }
-  .feature-card:hover .exposure-preview {
-    transform: rotate(-3deg) scale(0.9) !important;
+  @media (hover: hover) and (pointer: fine) {
+    .feature-card:hover .exposure-preview {
+      transform: rotate(-3deg) scale(0.9) !important;
+    }
   }
   .control-preview {
     transform: scale(0.8) !important;

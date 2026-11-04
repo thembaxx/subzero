@@ -44,8 +44,23 @@ test("demo accounts can be filtered, reviewed, imported, and exported", async ({
   await page.getByRole("textbox", { name: "Search accounts" }).fill("spotify");
   await expect(page.locator("tbody tr")).toHaveCount(1);
   await page.getByRole("button", { name: "Review Spotify", exact: true }).click();
-  await page.getByRole("button", { name: "Mark as reviewed", exact: true }).click();
+  const review = page.getByRole("form", { name: "Your account review" });
+  await review.getByLabel("Is this your account?").selectOption("confirmed");
+  await review.getByLabel("What will you do next?").selectOption("secure");
+  await review.getByLabel("Notes for yourself (optional)").fill("Enable two-factor authentication");
+  await review.getByRole("button", { name: "Save review on this device", exact: true }).click();
   await expect(page.locator("tbody")).toContainText("Reviewed");
+  await page.reload();
+  await page.getByRole("button", { name: "Your accounts", exact: true }).first().click();
+  await page.getByRole("textbox", { name: "Search accounts" }).fill("spotify");
+  await expect(page.locator("tbody")).toContainText("Reviewed");
+  await page.getByRole("button", { name: "Review Spotify", exact: true }).click();
+  await expect(review.getByLabel("Is this your account?")).toHaveValue("confirmed");
+  await expect(review.getByLabel("What will you do next?")).toHaveValue("secure");
+  await expect(review.getByLabel("Notes for yourself (optional)")).toHaveValue(
+    "Enable two-factor authentication",
+  );
+  await page.keyboard.press("Escape");
   await page.getByRole("textbox", { name: "Search accounts" }).fill("");
   await page.getByRole("button", { name: /Needs attention/ }).click();
   await expect(page.locator("tbody tr")).toHaveCount(2);
@@ -108,13 +123,14 @@ test("pages fit mobile, tablet, and desktop widths", async ({ page }) => {
 });
 
 test("both themes keep the landing and dashboard accessible", async ({ page }) => {
-  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.emulateMedia({ reducedMotion: "reduce", colorScheme: "light" });
   for (const path of ["/", "/dashboard?demo=1"]) {
     await page.goto(path);
     for (const theme of ["light", "dark"]) {
-      await page.evaluate((value) => {
-        document.documentElement.setAttribute("data-theme", value);
-      }, theme);
+      if ((await page.locator("html").getAttribute("data-theme")) !== theme) {
+        await page.getByRole("button", { name: "Toggle color theme" }).first().click();
+      }
+      await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
       const result = await new AxeBuilder({ page })
         .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
         .analyze();
