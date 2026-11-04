@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   description:
     "Meet your digital footprint. Verify your identity, discover possible accounts from your own data, and understand known exposures with Trace.",
   applicationName: "Trace",
+  manifest: "/manifest.webmanifest",
   appleWebApp: { capable: true, statusBarStyle: "default", title: "Trace" },
   icons: { icon: "/icon.svg", apple: "/apple-touch-icon.png" },
   openGraph: {
@@ -20,6 +21,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  viewportFit: "cover",
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#f7f8f4" },
     { media: "(prefers-color-scheme: dark)", color: "#171c18" },
